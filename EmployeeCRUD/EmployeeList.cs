@@ -64,5 +64,88 @@ namespace EmployeeCRUD
         {
 
         }
+
+        private void EmployeeList_Load(object sender, EventArgs e)
+        {
+            Contacts contact = new Contacts();
+            dgContacts.DataSource = contact.GetAllContacts();
+        }
+
+        private void dgContacts_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            int idx = e.RowIndex;
+
+            if (idx == -1 || dgContacts.SelectedCells[1].Value.ToString() == "")
+            {
+                MessageBox.Show("Select a valid row");
+                ResetForm();
+            }
+            else
+            {
+                textId.Text = dgContacts.SelectedRows[0].Cells[0].Value.ToString();
+                textName.Text = dgContacts.SelectedRows[0].Cells[1].Value.ToString();
+                textEmail.Text = dgContacts.SelectedRows[0].Cells[2].Value.ToString();
+                textPhone.Text = dgContacts.SelectedRows[0].Cells[3].Value.ToString();
+                cmbRole.Text = dgContacts.SelectedRows[0].Cells[4].Value.ToString();
+
+                btnSave.Enabled = false;
+                btnDelete.Enabled = true;
+                btnEdit.Enabled = true;
+            }
+        }
+
+        // The ResetForm method is used to clear the textboxes and set the focus to the name textbox.
+        public void ResetForm()
+        {
+            textId.Text = "";
+            textName.Text = "";
+            textEmail.Text = "";
+            textPhone.Text = "";
+            cmbRole.Text = "Select Role";
+
+            btnSave.Enabled = true;
+            btnDelete.Enabled = false;
+            btnEdit.Enabled = false;
+
+            textName.Focus();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            ResetForm();
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // Get the id from the textbox and convert it to integer
+            int id = Convert.ToInt32(textId.Text);
+
+            DialogResult confirm = MessageBox.Show("Are you sure you want to delete this record?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirm == DialogResult.Yes) {
+
+                Contacts contact = new Contacts();
+                int rowsAffected = contact.DeleteContact(id);
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Record Deleted", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ResetForm();
+                    Contacts newContact = new Contacts();
+                    dgContacts.DataSource = newContact.GetAllContacts();
+                }
+                else
+                {
+                    MessageBox.Show("Record Not Deleted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            } else
+            {
+                ResetForm();
+            }
+        }
     }
 }

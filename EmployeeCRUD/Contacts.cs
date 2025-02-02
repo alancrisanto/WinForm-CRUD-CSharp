@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Windows.Forms;
 
 namespace EmployeeCRUD
 {
@@ -31,6 +32,14 @@ namespace EmployeeCRUD
             this.role = role;
         }
 
+        //The default constructor initializes a new instance of the Contacts class with default values.
+        public Contacts () { }
+
+        public Contacts (int id)
+        {
+            this.id = id;
+        }
+
 
         //The MySqlConnection method is used to create a new MySqlConnection object and open a connection to the MySQL database.
         public MySqlConnection GetConnection()
@@ -40,7 +49,7 @@ namespace EmployeeCRUD
             try
             {
                 conn.Open();
-                MessageBox.Show("Connection Open");
+                //MessageBox.Show("Connection Open");
                 conn.Close();
             }
             catch (Exception ex)
@@ -86,6 +95,56 @@ namespace EmployeeCRUD
                     int rowsAdded = cmd.ExecuteNonQuery();
                     conn.Close(); // Close the connection
                     return rowsAdded;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                return 0; // Return 0 in case of an error
+            }
+        }
+
+        // The UpdateContact method is used to update a contact in the contacts table in the MySQL database.
+        public int UpdateContact(int id)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open(); // Open the connection
+                    string query = "UPDATE employees SET name = @name, email = @email, phone = @phone, role = @role WHERE id = @id";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@phone", phone);
+                    cmd.Parameters.AddWithValue("@role", role);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    int rowsUpdated = cmd.ExecuteNonQuery();
+                    conn.Close(); // Close the connection
+                    return rowsUpdated;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                return 0; // Return 0 in case of an error
+            }
+        }
+
+        // The DeleteContact method is used to delete a contact from the contacts table in the MySQL database.
+        public int DeleteContact(int id)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open(); // Open the connection
+                    string query = "DELETE FROM employees WHERE employees_id = @id";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    int rowsDeleted = cmd.ExecuteNonQuery();
+                    conn.Close(); // Close the connection
+                    return rowsDeleted;
                 }
             }
             catch (Exception ex)
