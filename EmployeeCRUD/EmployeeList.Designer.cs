@@ -146,8 +146,9 @@
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(75, 29);
             btnEdit.TabIndex = 9;
-            btnEdit.Text = "Edit";
+            btnEdit.Text = "Save";
             btnEdit.UseVisualStyleBackColor = false;
+            btnEdit.Click += btnEdit_Click;
             // 
             // btnSave
             // 
@@ -241,11 +242,11 @@
             // dgContacts
             // 
             dgContacts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgContacts.Location = new Point(12, 302);
+            dgContacts.Location = new Point(444, 12);
             dgContacts.Name = "dgContacts";
             dgContacts.ReadOnly = true;
             dgContacts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgContacts.Size = new Size(687, 173);
+            dgContacts.Size = new Size(565, 267);
             dgContacts.TabIndex = 2;
             dgContacts.CellMouseClick += dgContacts_CellMouseClick;
             // 
@@ -253,7 +254,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 487);
+            ClientSize = new Size(1021, 487);
             Controls.Add(dgContacts);
             Controls.Add(groupBox1);
             Font = new Font("Segoe UI", 10F);

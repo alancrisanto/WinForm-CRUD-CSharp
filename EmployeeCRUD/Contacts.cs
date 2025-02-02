@@ -24,8 +24,9 @@ namespace EmployeeCRUD
 
 
         //The constructor initializes a new instance of the Contacts class with the provided name, email, phone, and role.
-        public Contacts(string name, string email, string phone, string role)
+        public Contacts(int id, string name, string email, string phone, string role)
         {
+            this.id = id;
             this.name = name;
             this.email = email;
             this.phone = phone;
@@ -112,7 +113,7 @@ namespace EmployeeCRUD
                 using (MySqlConnection conn = GetConnection())
                 {
                     conn.Open(); // Open the connection
-                    string query = "UPDATE employees SET name = @name, email = @email, phone = @phone, role = @role WHERE id = @id";
+                    string query = "UPDATE employees SET name = @name, email = @email, phone = @phone, role = @role WHERE employees_id = @id";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@email", email);

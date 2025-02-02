@@ -39,7 +39,7 @@ namespace EmployeeCRUD
             else
             {
                 // Create a new instance of the Contacts class
-                Contacts newContact = new Contacts(name, email, phone, role);
+                Contacts newContact = new Contacts(0, name, email, phone, role);
                 int rowsAffected = newContact.AddContact();
 
                 // Check if the data was saved
@@ -52,6 +52,8 @@ namespace EmployeeCRUD
                     textEmail.Text = "";
                     textPhone.Text = "";
                     cmbRole.Text = "Select Role";
+
+                    ListContacts();
                 }
                 else
                 {
@@ -66,6 +68,12 @@ namespace EmployeeCRUD
         }
 
         private void EmployeeList_Load(object sender, EventArgs e)
+        {
+            ListContacts();
+        }
+
+        // The ListContacts method is used to display the list of contacts in the datagridview.
+        public void ListContacts()
         {
             Contacts contact = new Contacts();
             dgContacts.DataSource = contact.GetAllContacts();
@@ -127,7 +135,8 @@ namespace EmployeeCRUD
 
             DialogResult confirm = MessageBox.Show("Are you sure you want to delete this record?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (confirm == DialogResult.Yes) {
+            if (confirm == DialogResult.Yes)
+            {
 
                 Contacts contact = new Contacts();
                 int rowsAffected = contact.DeleteContact(id);
@@ -135,16 +144,45 @@ namespace EmployeeCRUD
                 {
                     MessageBox.Show("Record Deleted", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetForm();
-                    Contacts newContact = new Contacts();
-                    dgContacts.DataSource = newContact.GetAllContacts();
+                    ListContacts();
                 }
                 else
                 {
                     MessageBox.Show("Record Not Deleted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } else
+            }
+            else
             {
                 ResetForm();
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            int id = Convert.ToInt32(textId.Text);
+            string name = textName.Text;
+            string email = textEmail.Text;
+            string phone = textPhone.Text;
+            string role = cmbRole.Text;
+
+            if (name == "" || email == "" || phone == "" || role == "Select Role")
+            {
+                MessageBox.Show("All fields are required");
+            }
+            else
+            {
+                Contacts contact = new Contacts(id, name, email, phone, role);
+                int rowsAffected = contact.UpdateContact(id);
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Record Updated", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ResetForm();
+                    ListContacts();
+                }
+                else
+                {
+                    MessageBox.Show("Record Not Updated", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
